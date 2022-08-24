@@ -1,0 +1,72 @@
+﻿@using TravelingDiaries.ViewModel
+@model ShoppingCartViewModel
+
+<h2>Your Destinations are waiting for you. </h2>
+
+
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+
+        <th>Places</th>
+        <th class="text-right">Price</th>
+        <th class="text-right">Subtotal</th>
+                
+                   <th class="text-right">Member</th>
+                <th class="text-right">Update Member</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var line in Model.ShoppingCart.ShoppingCartItems)
+    {
+        <tr>
+            @*<td class="text-center">@line.Amount</td>*@
+            <td class="text-left">@line.Place.PlaceName</td>
+            <td class="text-right">@line.Place.PackagePrice.ToString("c")</td>
+            <td class="text-right">
+                @((line.Amount * line.Place.PackagePrice).ToString("c"))
+            </td>
+                 
+                  <td class="text-center">@line.Amount</td>
+         <td>
+             <a asp-controller="ShoppingCart" asp-action="RemoveFromShoppingCart" asp-route-Id="@line.Place.PlaceID" ><button class=" btn btn-danger" ><i class="bi bi-dash-circle-fill"></i></button> </a>
+             <h2>@line.Amount</h2>
+             <a asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-Id="@line.Place.PlaceID"><button class=" btn btn-success" ><i  class="bi bi-plus-circle-fill"></i></button> </a>
+
+           
+             
+         </td> 
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+    <tr>
+            @if (@"ViewBag.Couponvalue"!= null)
+            {
+
+               
+                 <td colspan="4" class="text-right">Total:Amazing u are getting  discount.</td><div>@ViewBag.Couponvalue</div>
+
+            }
+            <td colspan="4" class="text-right">Total:</td>
+        <td class="text-right">
+         Total Amount:  @Model.ShoppingCartTotal.ToString("c")
+        </td>
+    </tr>
+    </tfoot>
+</table>
+
+<div class="text-center">
+    <a class="btn btn-primary" asp-controller="Order" asp-action="Checkout">Checkout</a>
+     <a class="btn btn-danger" asp-controller="ShoppingCart" asp-action="ClearCart">Clear Cart</a>
+     <br></br>
+     <form class="form-group">
+           <input type="text"  placeholder="Write Coupon Code Here" name="Code"><br></br>
+         <button type="submit" asp-controller="ShoppingCart" asp-action="SearchCoupon">Try Coupon</button>
+
+     </form>
+     
+</div>
+<br></br>
+<partial name="_Banner.cshtml">
